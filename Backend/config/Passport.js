@@ -40,6 +40,44 @@ passport.use(new GoogleStrategy({
 ));
 
 
+// Facebook Strategy 
+
+passport.use(new FacebookStrategy({
+        clientID : process.env.FACEBOOK_APP_ID,
+        clientSecret : process.env.FACEBOOK_APP_SECRET,
+        callbackURL : "http://localhost:8080/auth/facebook/callback",
+        profileFields : ['id', 'displayName', 'email']
+    },
+    async (accessToken, refreshToken, profile, done) =>{
+        try{
+            let user = await User.findOne({facebookId : profile.id});
+            if(user) return done(null, user);
+
+            const email = profile.emails ? profile.emails[0].value : `${profile.id}@facebook.com`;
+
+            user = await User.findOne({email : email});
+            if(user) {
+                user.facebookId = profile.id;
+                await user.save();
+                return done(null, user);
+            }
+
+            const newUser = await User.create({
+                username : profile.displayName.split(' ').join('').toLowerCase() + "_fb",
+                email : email,
+                facebookId : profile.id,
+                authMethod : 'facebook'
+            });
+
+            done(null, newUser);
+        }catch (error) {
+            done(error, null);
+        }
+
+
+    }
+));
+
 
 passport.serializeUser((user, done) => {
   done(null, user.id);
