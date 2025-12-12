@@ -13,7 +13,7 @@ const Navbar = () => {
           
           {/* 1. Brand / Logo */}
           <div className="shrink-0 cursor-pointer">
-            <h1 className="text-2xl font-logo tracking-wider font-logo text-white">
+            <h1 className="text-2xl font-logo tracking-wider text-white">
               Travel Mate
             </h1>
           </div>
