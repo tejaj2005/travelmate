@@ -1,1 +1,11 @@
 @import "tailwindcss";
+
+@theme {
+  --font-logo: "Special Elite", system-ui;
+  --font-sans: "Poppins", sans-serif;
+}
+
+@layer utilities {
+  .font-logo { font-family: var(--font-logo); font-weight: 900; font-style: normal;}
+  .font-sans { font-family: var(--font-sans); }
+}
