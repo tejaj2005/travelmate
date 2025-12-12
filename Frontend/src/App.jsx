@@ -1,15 +1,10 @@
-import { useState } from 'react'
+import React from 'react';
+import AuthPage from './pages/AuthPage'; 
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <>
-      <div className="text-center mt-10">
-        Hello
-      </div>
-    </>
-  )
+    <AuthPage />
+  );
 }
 
-export default App
+export default App;
