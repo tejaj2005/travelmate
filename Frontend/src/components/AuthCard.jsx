@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { Mail, Lock, User } from "lucide-react";
 import { FcGoogle } from "react-icons/fc";
 import { FaFacebook } from "react-icons/fa";
 import { Typewriter } from "react-simple-typewriter";
@@ -9,16 +8,14 @@ import { Typewriter } from "react-simple-typewriter";
 // Border/Stroke: #212121
 // Highlight: #1C769A
 
-const AuthCard = () => {
+const AuthCard = ({ activeWord }) => {
   const [isLogin, setIsLogin] = useState(false);
 
   const handleGoogleLogin = () => {
-    // Replace the console.log with your actual Google OAuth implementation later
     console.log("Initiating Google login...");
   };
 
   const handleFacebookLogin = () => {
-    // Replace the console.log with your actual Facebook OAuth implementation later
     console.log("Initiating Facebook login...");
   };
 
@@ -28,39 +25,29 @@ const AuthCard = () => {
   const buttonText = isLogin ? "Login" : "Sign up";
 
   return (
-    // Outer Container with Fixed Height
     <div className="w-full max-w-md h-[580px] p-10 rounded-xl bg-[#00070C]/60 backdrop-blur-lg border border-[#212121] shadow-2xl">
-      {/* Title Section (Fixed Header) */}
-      <div className="mb-15">
+      {/*  Title */}
+      <div className="mb-12">
         <h2 className="text-4xl font-logo tracking-widest text-white leading-none mb-2">
           New
         </h2>
 
-        <h2 className="text-4xl font-logo tracking-widest text-[#1C769A] leading-none h-10 animate-pulse">
+        <h2 className="text-4xl font-logo tracking-widest text-[#1C769A] leading-none h-10">
           <Typewriter
-            words={[
-              "Destination",
-              "Adventure",
-              "Exploration",
-              "Footprints",
-              "Dreamscapes",
-            ]}
-            loop={0} // infinite loop
+            key={activeWord} 
+            words={[activeWord]}
+            loop={1}
             cursor
             cursorStyle="|"
-            typeSpeed={90}
-            deleteSpeed={50}
+            typeSpeed={80}
+            deleteSpeed={40}
             delaySpeed={1500}
           />
         </h2>
       </div>
 
-      {/* --- FLEX CONTAINER FOR CONTENT (FORM + FOOTER) --- */}
-      {/* This container ensures the form fields grow and the footer stays at the bottom */}
-      <div className="flex flex-col h-[calc(100%-6rem)] -mt-8">
-        {" "}
-        {/* Adjusted height to account for mb-8 + pb-10 and title */}
-        {/* --- FORM FIELDS AND PRIMARY BUTTON (Flex Grow) --- */}
+      {/*  Form */}
+      <div className="flex flex-col h-[calc(100%-6rem)] -mt-6">
         <form className="space-y-6 grow">
           <input type="text" placeholder="Username" className={inputStyle} />
 
@@ -100,7 +87,6 @@ const AuthCard = () => {
             </div>
           )}
 
-          {/* Primary Action Button - Moved inside form for semantic correctness, but flex-grow manages space */}
           <button
             type="submit"
             className="w-full h-12 bg-[#1C769A] text-white font-semibold rounded-lg hover:bg-opacity-90 transition-all duration-300 shadow-lg shadow-[#1C769A]/30 font-sans text-base mt-5"
@@ -108,9 +94,9 @@ const AuthCard = () => {
             {buttonText}
           </button>
         </form>
-        {/* --- TOGGLE LINKS AND SOCIAL LOGIN (Flex Shrink - anchored to bottom) --- */}
+
+        {/*  Footer */}
         <div className="shrink-0 text-center font-sans pt-4 mt-4">
-          {/* Switch Link */}
           <p className="text-sm text-white">
             {isLogin ? "New User? " : "Already exists? "}
             <button
@@ -121,7 +107,6 @@ const AuthCard = () => {
             </button>
           </p>
 
-          {/* Social Login - Conditional Visibility */}
           <div
             className={`mt-6 space-y-3 transition-opacity duration-300 ${
               isLogin ? "opacity-100 visible" : "opacity-0 invisible"
@@ -136,25 +121,21 @@ const AuthCard = () => {
             <div className="flex justify-center space-x-10 pb-2">
               <button
                 onClick={handleGoogleLogin}
-                className="flex items-center justify-center w-11 h-11 rounded-full bg-transparent border border-gray-600/50 text-white hover:border-[#1C769A] transition duration-150 ease-in-out"
-                aria-label="Login with Google"
+                className="flex items-center justify-center w-11 h-11 rounded-full bg-transparent border border-gray-600/50 hover:border-[#1C769A] transition"
               >
                 <FcGoogle size={24} />
               </button>
 
               <button
                 onClick={handleFacebookLogin}
-                className="flex items-center justify-center w-11 h-11 rounded-full bg-transparent border border-gray-600/50 text-white hover:border-[#1C769A] transition duration-150 ease-in-out"
-                aria-label="Login with Facebook"
+                className="flex items-center justify-center w-11 h-11 rounded-full bg-transparent border border-gray-600/50 hover:border-[#1C769A] transition"
               >
                 <FaFacebook size={24} className="text-blue-500" />
               </button>
             </div>
           </div>
         </div>
-        {/* --- END: TOGGLE LINKS AND SOCIAL LOGIN --- */}
       </div>
-      {/* --- END: FLEX CONTAINER FOR CONTENT --- */}
     </div>
   );
 };
