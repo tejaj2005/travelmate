@@ -2,13 +2,10 @@ import React, { useState } from "react";
 import { FcGoogle } from "react-icons/fc";
 import { FaFacebook } from "react-icons/fa";
 import { Typewriter } from "react-simple-typewriter";
-
-// Color Palette Reminder:
-// Background: #00070C
-// Border/Stroke: #212121
-// Highlight: #1C769A
+import { useTheme } from "../context/ThemeContext";
 
 const AuthCard = ({ activeWord }) => {
+  const { theme } = useTheme();
   const [isLogin, setIsLogin] = useState(false);
 
   const handleGoogleLogin = () => {
@@ -19,22 +16,34 @@ const AuthCard = ({ activeWord }) => {
     console.log("Initiating Facebook login...");
   };
 
+  // Inputs now rely on CSS variables instead of dark/light classes
   const inputStyle =
-    "w-full border-b border-[#212121] bg-transparent text-white placeholder:text-gray-500 focus:outline-none focus:border-[#1C769A] p-2 transition-colors duration-300 font-sans text-sm";
+    "w-full border-b bg-transparent p-2 transition-colors duration-300 font-sans text-sm focus:outline-none focus:border-[#1C769A]";
 
   const buttonText = isLogin ? "Login" : "Sign up";
 
   return (
-    <div className="w-full max-w-md h-[580px] p-10 rounded-xl bg-[#00070C]/60 backdrop-blur-lg border border-[#212121] shadow-2xl">
-      {/*  Title */}
+    <div
+      className="
+        w-full max-w-md h-[580px] p-10 rounded-xl
+        backdrop-blur-lg border shadow-2xl
+        transition-colors duration-500
+      "
+      style={{
+        backgroundColor: "var(--card-bg)",
+        color: "var(--text)",
+        borderColor: "var(--border)",
+      }}
+    >
+      {/* TITLE */}
       <div className="mb-12">
-        <h2 className="text-4xl font-logo tracking-widest text-white leading-none mb-2">
+        <h2 className="text-4xl font-logo tracking-widest mb-2">
           New
         </h2>
 
-        <h2 className="text-4xl font-logo tracking-widest text-[#1C769A] leading-none h-10">
+        <h2 className="text-4xl font-logo tracking-widest text-[#1C769A] h-10">
           <Typewriter
-            key={activeWord} 
+            key={activeWord}
             words={[activeWord]}
             loop={1}
             cursor
@@ -46,19 +55,39 @@ const AuthCard = ({ activeWord }) => {
         </h2>
       </div>
 
-      {/*  Form */}
+      {/* FORM */}
       <div className="flex flex-col h-[calc(100%-6rem)] -mt-6">
         <form className="space-y-6 grow">
-          <input type="text" placeholder="Username" className={inputStyle} />
+          <input
+            type="text"
+            placeholder="Username"
+            className={inputStyle}
+            style={{
+              color: "var(--text)",
+              borderColor: "var(--border)",
+            }}
+          />
 
           {!isLogin && (
-            <input type="email" placeholder="Email" className={inputStyle} />
+            <input
+              type="email"
+              placeholder="Email"
+              className={inputStyle}
+              style={{
+                color: "var(--text)",
+                borderColor: "var(--border)",
+              }}
+            />
           )}
 
           <input
             type="password"
             placeholder="Password"
             className={inputStyle}
+            style={{
+              color: "var(--text)",
+              borderColor: "var(--border)",
+            }}
           />
 
           {!isLogin && (
@@ -66,42 +95,28 @@ const AuthCard = ({ activeWord }) => {
               type="password"
               placeholder="Confirm Password"
               className={inputStyle}
+              style={{
+                color: "var(--text)",
+                borderColor: "var(--border)",
+              }}
             />
-          )}
-
-          {isLogin && (
-            <div className="flex justify-between items-center text-xs pt-2">
-              <label className="flex items-center space-x-2 text-gray-400 cursor-pointer">
-                <input
-                  type="checkbox"
-                  className="h-4 w-4 border-[#212121] bg-gray-400 text-[#1C769A] rounded focus:ring-[#1C769A]"
-                />
-                <span>Remember me</span>
-              </label>
-              <a
-                href="#"
-                className="text-gray-400 hover:text-[#1C769A] transition-colors duration-300"
-              >
-                Forgot Password?
-              </a>
-            </div>
           )}
 
           <button
             type="submit"
-            className="w-full h-12 bg-[#1C769A] text-white font-semibold rounded-lg hover:bg-opacity-90 transition-all duration-300 shadow-lg shadow-[#1C769A]/30 font-sans text-base mt-5"
+            className="w-full h-12 bg-[#1C769A] text-white font-semibold rounded-lg hover:bg-opacity-90 transition-all duration-300 shadow-lg shadow-[#1C769A]/30 mt-5"
           >
             {buttonText}
           </button>
         </form>
 
-        {/*  Footer */}
-        <div className="shrink-0 text-center font-sans pt-4 mt-4">
-          <p className="text-sm text-white">
+        {/* FOOTER */}
+        <div className="shrink-0 text-center pt-4 mt-4">
+          <p className="text-sm">
             {isLogin ? "New User? " : "Already exists? "}
             <button
               onClick={() => setIsLogin(!isLogin)}
-              className="text-[#1C769A] font-medium hover:underline ml-1 focus:outline-none"
+              className="text-[#1C769A] font-medium hover:underline ml-1"
             >
               {isLogin ? "Sign up" : "Login"}
             </button>
@@ -113,22 +128,30 @@ const AuthCard = ({ activeWord }) => {
             }`}
           >
             <div className="relative flex items-center justify-center py-2">
-              <div className="grow border-t border-[#212121]"></div>
-              <span className="shrink mx-4 text-gray-500 text-xs px-2">OR</span>
-              <div className="grow border-t border-[#212121]"></div>
+              <div
+                className="grow border-t"
+                style={{ borderColor: "var(--border)" }}
+              />
+              <span className="mx-4 text-xs text-gray-400">OR</span>
+              <div
+                className="grow border-t"
+                style={{ borderColor: "var(--border)" }}
+              />
             </div>
 
             <div className="flex justify-center space-x-10 pb-2">
               <button
                 onClick={handleGoogleLogin}
-                className="flex items-center justify-center w-11 h-11 rounded-full bg-transparent border border-gray-600/50 hover:border-[#1C769A] transition"
+                className="flex items-center justify-center w-11 h-11 rounded-full border transition hover:border-[#1C769A]"
+                style={{ borderColor: "var(--border)" }}
               >
                 <FcGoogle size={24} />
               </button>
 
               <button
                 onClick={handleFacebookLogin}
-                className="flex items-center justify-center w-11 h-11 rounded-full bg-transparent border border-gray-600/50 hover:border-[#1C769A] transition"
+                className="flex items-center justify-center w-11 h-11 rounded-full border transition hover:border-[#1C769A]"
+                style={{ borderColor: "var(--border)" }}
               >
                 <FaFacebook size={24} className="text-blue-500" />
               </button>

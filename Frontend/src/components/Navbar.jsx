@@ -1,34 +1,47 @@
-import React, { useState } from "react";
+import React from "react";
 import { Moon, Sun } from "lucide-react";
+import { useTheme } from "../context/ThemeContext";
 
 const Navbar = () => {
-  const [darkMode, setDarkMode] = useState(true); // Default to dark
-
-  const toggleTheme = () => setDarkMode(!darkMode);
+  const { theme, toggleTheme } = useTheme();
 
   return (
-    <nav className="w-full fixed top-0 z-50 bg-[#00070C]/60 backdrop-blur-md">
+    <nav
+      className="
+        fixed top-0 z-50 w-full
+        backdrop-blur-md
+        transition-colors duration-300
+      "
+      style={{
+        backgroundColor: "var(--glass-bg)", 
+        color: "var(--text)",
+      }}
+    >
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
-        <div className="flex items-center justify-between h-20">
+        <div className="flex h-20 items-center justify-between">
+
           {/* Logo */}
-          <div className="shrink-0 cursor-pointer">
-            <h1 className="text-2xl font-logo tracking-wider text-white">
+          <div className="cursor-pointer shrink-0">
+            <h1 className="text-2xl font-logo tracking-wider text-[#1C769A]">
               Travel Mate
             </h1>
           </div>
 
-          {/* Navigation & Actions */}
+          {/* Navigation + Actions */}
           <div className="flex items-center space-x-12">
+
+            {/* Links */}
             <div className="flex space-x-8">
               <a
                 href="#contact"
-                className="text-white text-sm font-medium transition-colors duration-200 hover:text-[#1C769A]"
+                className="text-sm font-medium transition-colors duration-200 hover:text-[#1C769A]"
               >
                 Contact Us
               </a>
+
               <a
                 href="#about"
-                className="text-white text-sm font-medium transition-colors duration-200 hover:text-[#1C769A]"
+                className="text-sm font-medium transition-colors duration-200 hover:text-[#1C769A]"
               >
                 About
               </a>
@@ -36,23 +49,24 @@ const Navbar = () => {
 
             {/* Theme Toggle */}
             <button
-  onClick={toggleTheme}
-  className="
-    relative
-    p-2 rounded-full
-    transition-all duration-300 ease-out
-    hover:scale-110
-    hover:shadow-lg
-    hover:shadow-[#1C769A]/20
-    active:scale-95
-  "
->
-              {darkMode ? (
-                <Moon className="text-white" size={20} />
+              onClick={toggleTheme}
+              className="
+                p-2 rounded-full
+                transition-all duration-300 ease-out
+                hover:scale-110
+                hover:shadow-lg
+                hover:shadow-[#1C769A]/20
+                active:scale-95
+              "
+              aria-label="Toggle theme"
+            >
+              {theme === "dark" ? (
+                <Moon size={20} />
               ) : (
-                <Sun className="text-white" size={20} />
+                <Sun size={20} />
               )}
             </button>
+
           </div>
         </div>
       </div>
