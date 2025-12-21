@@ -1,77 +1,114 @@
 import React, { useState } from "react";
-import { Mail, Lock, User } from "lucide-react";
 import { FcGoogle } from "react-icons/fc";
 import { FaFacebook } from "react-icons/fa";
 import { Typewriter } from "react-simple-typewriter";
+import { useTheme } from "../context/ThemeContext";
+import { useAuth } from "../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 
-// Color Palette Reminder:
-// Background: #00070C
-// Border/Stroke: #212121
-// Highlight: #1C769A
-
-const AuthCard = () => {
+const AuthCard = ({ activeWord }) => {
+  const { login } = useAuth();
+  const navigate = useNavigate();
+  const { theme } = useTheme();
   const [isLogin, setIsLogin] = useState(false);
 
+  /* ---------------- HANDLERS ---------------- */
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    // 🔐 Fake login (replace with API later)
+    login({
+      id: 1,
+      name: "TravelMate User",
+      email: "user@travelmate.com",
+    });
+
+    // 🚀 Redirect to Feed
+    navigate("/feed");
+  };
+
   const handleGoogleLogin = () => {
-    // Replace the console.log with your actual Google OAuth implementation later
     console.log("Initiating Google login...");
   };
 
   const handleFacebookLogin = () => {
-    // Replace the console.log with your actual Facebook OAuth implementation later
     console.log("Initiating Facebook login...");
   };
 
+  /* ---------------- STYLES ---------------- */
+
   const inputStyle =
-    "w-full border-b border-[#212121] bg-transparent text-white placeholder:text-gray-500 focus:outline-none focus:border-[#1C769A] p-2 transition-colors duration-300 font-sans text-sm";
+    "w-full border-b bg-transparent p-2 transition-colors duration-300 font-sans text-sm focus:outline-none focus:border-[#1C769A]";
 
   const buttonText = isLogin ? "Login" : "Sign up";
 
   return (
-    // Outer Container with Fixed Height
-    <div className="w-full max-w-md h-[580px] p-10 rounded-xl bg-[#00070C]/60 backdrop-blur-lg border border-[#212121] shadow-2xl">
-      {/* Title Section (Fixed Header) */}
-      <div className="mb-15">
-        <h2 className="text-4xl font-logo tracking-widest text-white leading-none mb-2">
+    <div
+      className="
+        w-full max-w-md h-[580px] p-10 rounded-xl
+        backdrop-blur-lg border shadow-2xl
+        transition-colors duration-500
+      "
+      style={{
+        backgroundColor: "var(--card-bg)",
+        color: "var(--text)",
+        borderColor: "var(--border)",
+      }}
+    >
+      {/* ---------------- TITLE ---------------- */}
+      <div className="mb-12">
+        <h2 className="text-4xl font-logo tracking-widest mb-2">
           New
         </h2>
 
-        <h2 className="text-4xl font-logo tracking-widest text-[#1C769A] leading-none h-10 animate-pulse">
+        <h2 className="text-4xl font-logo tracking-widest text-[#1C769A] h-10">
           <Typewriter
-            words={[
-              "Destination",
-              "Adventure",
-              "Exploration",
-              "Footprints",
-              "Dreamscapes",
-            ]}
-            loop={0} // infinite loop
+            key={activeWord}
+            words={[activeWord]}
+            loop={1}
             cursor
             cursorStyle="|"
-            typeSpeed={90}
-            deleteSpeed={50}
+            typeSpeed={80}
+            deleteSpeed={40}
             delaySpeed={1500}
           />
         </h2>
       </div>
 
-      {/* --- FLEX CONTAINER FOR CONTENT (FORM + FOOTER) --- */}
-      {/* This container ensures the form fields grow and the footer stays at the bottom */}
-      <div className="flex flex-col h-[calc(100%-6rem)] -mt-8">
-        {" "}
-        {/* Adjusted height to account for mb-8 + pb-10 and title */}
-        {/* --- FORM FIELDS AND PRIMARY BUTTON (Flex Grow) --- */}
-        <form className="space-y-6 grow">
-          <input type="text" placeholder="Username" className={inputStyle} />
+      {/* ---------------- FORM ---------------- */}
+      <div className="flex flex-col h-[calc(100%-6rem)] -mt-6">
+        <form className="space-y-6 grow" onSubmit={handleSubmit}>
+          <input
+            type="text"
+            placeholder="Username"
+            className={inputStyle}
+            style={{
+              color: "var(--text)",
+              borderColor: "var(--border)",
+            }}
+          />
 
           {!isLogin && (
-            <input type="email" placeholder="Email" className={inputStyle} />
+            <input
+              type="email"
+              placeholder="Email"
+              className={inputStyle}
+              style={{
+                color: "var(--text)",
+                borderColor: "var(--border)",
+              }}
+            />
           )}
 
           <input
             type="password"
             placeholder="Password"
             className={inputStyle}
+            style={{
+              color: "var(--text)",
+              borderColor: "var(--border)",
+            }}
           />
 
           {!isLogin && (
@@ -79,82 +116,87 @@ const AuthCard = () => {
               type="password"
               placeholder="Confirm Password"
               className={inputStyle}
+              style={{
+                color: "var(--text)",
+                borderColor: "var(--border)",
+              }}
             />
           )}
 
-          {isLogin && (
-            <div className="flex justify-between items-center text-xs pt-2">
-              <label className="flex items-center space-x-2 text-gray-400 cursor-pointer">
-                <input
-                  type="checkbox"
-                  className="h-4 w-4 border-[#212121] bg-gray-400 text-[#1C769A] rounded focus:ring-[#1C769A]"
-                />
-                <span>Remember me</span>
-              </label>
-              <a
-                href="#"
-                className="text-gray-400 hover:text-[#1C769A] transition-colors duration-300"
-              >
-                Forgot Password?
-              </a>
-            </div>
-          )}
-
-          {/* Primary Action Button - Moved inside form for semantic correctness, but flex-grow manages space */}
+          {/* SUBMIT */}
           <button
             type="submit"
-            className="w-full h-12 bg-[#1C769A] text-white font-semibold rounded-lg hover:bg-opacity-90 transition-all duration-300 shadow-lg shadow-[#1C769A]/30 font-sans text-base mt-5"
+            className="
+              w-full h-12 bg-[#1C769A] text-white
+              font-semibold rounded-lg
+              hover:bg-opacity-90
+              transition-all duration-300
+              shadow-lg shadow-[#1C769A]/30
+              mt-5
+            "
           >
             {buttonText}
           </button>
         </form>
-        {/* --- TOGGLE LINKS AND SOCIAL LOGIN (Flex Shrink - anchored to bottom) --- */}
-        <div className="shrink-0 text-center font-sans pt-4 mt-4">
-          {/* Switch Link */}
-          <p className="text-sm text-white">
+
+        {/* ---------------- FOOTER ---------------- */}
+        <div className="shrink-0 text-center pt-4 mt-4">
+          <p className="text-sm">
             {isLogin ? "New User? " : "Already exists? "}
             <button
               onClick={() => setIsLogin(!isLogin)}
-              className="text-[#1C769A] font-medium hover:underline ml-1 focus:outline-none"
+              className="text-[#1C769A] font-medium hover:underline ml-1"
             >
               {isLogin ? "Sign up" : "Login"}
             </button>
           </p>
 
-          {/* Social Login - Conditional Visibility */}
+          {/* SOCIAL LOGIN */}
           <div
             className={`mt-6 space-y-3 transition-opacity duration-300 ${
               isLogin ? "opacity-100 visible" : "opacity-0 invisible"
             }`}
           >
             <div className="relative flex items-center justify-center py-2">
-              <div className="grow border-t border-[#212121]"></div>
-              <span className="shrink mx-4 text-gray-500 text-xs px-2">OR</span>
-              <div className="grow border-t border-[#212121]"></div>
+              <div
+                className="grow border-t"
+                style={{ borderColor: "var(--border)" }}
+              />
+              <span className="mx-4 text-xs text-gray-400">OR</span>
+              <div
+                className="grow border-t"
+                style={{ borderColor: "var(--border)" }}
+              />
             </div>
 
             <div className="flex justify-center space-x-10 pb-2">
               <button
                 onClick={handleGoogleLogin}
-                className="flex items-center justify-center w-11 h-11 rounded-full bg-transparent border border-gray-600/50 text-white hover:border-[#1C769A] transition duration-150 ease-in-out"
-                aria-label="Login with Google"
+                className="
+                  flex items-center justify-center
+                  w-11 h-11 rounded-full
+                  border transition hover:border-[#1C769A]
+                "
+                style={{ borderColor: "var(--border)" }}
               >
                 <FcGoogle size={24} />
               </button>
 
               <button
                 onClick={handleFacebookLogin}
-                className="flex items-center justify-center w-11 h-11 rounded-full bg-transparent border border-gray-600/50 text-white hover:border-[#1C769A] transition duration-150 ease-in-out"
-                aria-label="Login with Facebook"
+                className="
+                  flex items-center justify-center
+                  w-11 h-11 rounded-full
+                  border transition hover:border-[#1C769A]
+                "
+                style={{ borderColor: "var(--border)" }}
               >
                 <FaFacebook size={24} className="text-blue-500" />
               </button>
             </div>
           </div>
         </div>
-        {/* --- END: TOGGLE LINKS AND SOCIAL LOGIN --- */}
       </div>
-      {/* --- END: FLEX CONTAINER FOR CONTENT --- */}
     </div>
   );
 };
