@@ -3,10 +3,30 @@ import { FcGoogle } from "react-icons/fc";
 import { FaFacebook } from "react-icons/fa";
 import { Typewriter } from "react-simple-typewriter";
 import { useTheme } from "../context/ThemeContext";
+import { useAuth } from "../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 const AuthCard = ({ activeWord }) => {
+  const { login } = useAuth();
+  const navigate = useNavigate();
   const { theme } = useTheme();
   const [isLogin, setIsLogin] = useState(false);
+
+  /* ---------------- HANDLERS ---------------- */
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    // 🔐 Fake login (replace with API later)
+    login({
+      id: 1,
+      name: "TravelMate User",
+      email: "user@travelmate.com",
+    });
+
+    // 🚀 Redirect to Feed
+    navigate("/feed");
+  };
 
   const handleGoogleLogin = () => {
     console.log("Initiating Google login...");
@@ -16,7 +36,8 @@ const AuthCard = ({ activeWord }) => {
     console.log("Initiating Facebook login...");
   };
 
-  // Inputs now rely on CSS variables instead of dark/light classes
+  /* ---------------- STYLES ---------------- */
+
   const inputStyle =
     "w-full border-b bg-transparent p-2 transition-colors duration-300 font-sans text-sm focus:outline-none focus:border-[#1C769A]";
 
@@ -35,7 +56,7 @@ const AuthCard = ({ activeWord }) => {
         borderColor: "var(--border)",
       }}
     >
-      {/* TITLE */}
+      {/* ---------------- TITLE ---------------- */}
       <div className="mb-12">
         <h2 className="text-4xl font-logo tracking-widest mb-2">
           New
@@ -55,9 +76,9 @@ const AuthCard = ({ activeWord }) => {
         </h2>
       </div>
 
-      {/* FORM */}
+      {/* ---------------- FORM ---------------- */}
       <div className="flex flex-col h-[calc(100%-6rem)] -mt-6">
-        <form className="space-y-6 grow">
+        <form className="space-y-6 grow" onSubmit={handleSubmit}>
           <input
             type="text"
             placeholder="Username"
@@ -102,15 +123,23 @@ const AuthCard = ({ activeWord }) => {
             />
           )}
 
+          {/* SUBMIT */}
           <button
             type="submit"
-            className="w-full h-12 bg-[#1C769A] text-white font-semibold rounded-lg hover:bg-opacity-90 transition-all duration-300 shadow-lg shadow-[#1C769A]/30 mt-5"
+            className="
+              w-full h-12 bg-[#1C769A] text-white
+              font-semibold rounded-lg
+              hover:bg-opacity-90
+              transition-all duration-300
+              shadow-lg shadow-[#1C769A]/30
+              mt-5
+            "
           >
             {buttonText}
           </button>
         </form>
 
-        {/* FOOTER */}
+        {/* ---------------- FOOTER ---------------- */}
         <div className="shrink-0 text-center pt-4 mt-4">
           <p className="text-sm">
             {isLogin ? "New User? " : "Already exists? "}
@@ -122,6 +151,7 @@ const AuthCard = ({ activeWord }) => {
             </button>
           </p>
 
+          {/* SOCIAL LOGIN */}
           <div
             className={`mt-6 space-y-3 transition-opacity duration-300 ${
               isLogin ? "opacity-100 visible" : "opacity-0 invisible"
@@ -142,7 +172,11 @@ const AuthCard = ({ activeWord }) => {
             <div className="flex justify-center space-x-10 pb-2">
               <button
                 onClick={handleGoogleLogin}
-                className="flex items-center justify-center w-11 h-11 rounded-full border transition hover:border-[#1C769A]"
+                className="
+                  flex items-center justify-center
+                  w-11 h-11 rounded-full
+                  border transition hover:border-[#1C769A]
+                "
                 style={{ borderColor: "var(--border)" }}
               >
                 <FcGoogle size={24} />
@@ -150,7 +184,11 @@ const AuthCard = ({ activeWord }) => {
 
               <button
                 onClick={handleFacebookLogin}
-                className="flex items-center justify-center w-11 h-11 rounded-full border transition hover:border-[#1C769A]"
+                className="
+                  flex items-center justify-center
+                  w-11 h-11 rounded-full
+                  border transition hover:border-[#1C769A]
+                "
                 style={{ borderColor: "var(--border)" }}
               >
                 <FaFacebook size={24} className="text-blue-500" />
