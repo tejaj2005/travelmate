@@ -8,7 +8,7 @@ const Navbar = () => {
   return (
     <nav
       className="
-        fixed top-0 z-50 w-full
+        sticky top-0 z-50 h-20 w-full
         backdrop-blur-md
         transition-colors duration-300
       "

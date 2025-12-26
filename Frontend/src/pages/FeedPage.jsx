@@ -71,7 +71,7 @@ const FeedPage = () => {
 
   return (
     <div
-      className="min-h-screen transition-colors"
+      className="h-screen overflow-hidden transition-colors"
       style={{
         backgroundColor: "var(--bg)",
         color: "var(--text)",
@@ -80,13 +80,13 @@ const FeedPage = () => {
       {/* Top Navbar */}
       <Navbar />
 
-      <div className="flex pt-20 pl-64">
+      <div className="flex pl-64 h-[calc(100vh-5rem)]">
 
         {/* Left Sidebar */}
         <LeftNavbar />
 
         {/* Feed Center */}
-        <main className="flex-1 flex justify-center mt-4">
+        <main className="flex-1 flex justify-center overflow-y-auto pt-4">
           <div className="w-full max-w-[820px] space-y-2">
             {posts.map((post) => (
               <PostCard key={post.id} post={post} />
@@ -110,7 +110,6 @@ const FeedPage = () => {
         <div className="hidden xl:block sticky top-24 h-fit pr-6">
           <RightSidebar />
         </div>
-
       </div>
     </div>
   );
