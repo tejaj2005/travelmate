@@ -1,8 +1,17 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, {
+  useEffect,
+  useRef,
+  useState,
+  useCallback,
+} from "react";
+
 import Navbar from "../components/Navbar";
 import LeftNavbar from "../components/LeftNavbar";
 import RightSidebar from "../components/RightSidebar";
 import PostCard from "../components/PostCard";
+import StoryUploadModal from "../components/StoryUploadModal";
+
+/* MOCK POSTS */
 
 const initialPosts = [
   {
@@ -29,15 +38,16 @@ const initialPosts = [
   },
 ];
 
-/* FEED PAGE */
+/*  FEED PAGE */
 
 const FeedPage = () => {
   const [posts, setPosts] = useState(initialPosts);
   const [loading, setLoading] = useState(false);
+  const [showStoryModal, setShowStoryModal] = useState(false);
+
   const loaderRef = useRef(null);
 
-  // Load more posts (mock API)
-  const loadMorePosts = () => {
+  const loadMorePosts = useCallback(() => {
     if (loading) return;
 
     setLoading(true);
@@ -52,7 +62,7 @@ const FeedPage = () => {
       ]);
       setLoading(false);
     }, 900);
-  };
+  }, [loading]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -67,7 +77,7 @@ const FeedPage = () => {
     if (loaderRef.current) observer.observe(loaderRef.current);
 
     return () => observer.disconnect();
-  }, []);
+  }, [loadMorePosts]);
 
   return (
     <div
@@ -77,22 +87,22 @@ const FeedPage = () => {
         color: "var(--text)",
       }}
     >
-      {/* Top Navbar */}
+      {/* TOP NAVBAR */}
       <Navbar />
 
-      <div className="flex pl-64 h-[calc(100vh-5rem)]">
-
-        {/* Left Sidebar */}
+      {/* MAIN LAYOUT */}
+      <div className="flex h-[calc(100vh-5rem)] pl-64">
+        {/* LEFT SIDEBAR */}
         <LeftNavbar />
 
-        {/* Feed Center */}
+        {/* FEED CENTER */}
         <main className="flex-1 flex justify-center overflow-y-auto pt-4">
-          <div className="w-full max-w-[820px] space-y-2">
+          <div className="w-full max-w-[820px] space-y-6">
             {posts.map((post) => (
               <PostCard key={post.id} post={post} />
             ))}
 
-            {/* Loader */}
+            {/* LOADER */}
             <div
               ref={loaderRef}
               className="h-24 flex items-center justify-center"
@@ -106,11 +116,16 @@ const FeedPage = () => {
           </div>
         </main>
 
-        {/* Right Sidebar */}
+        {/* RIGHT SIDEBAR */}
         <div className="hidden xl:block sticky top-24 h-fit pr-6">
-          <RightSidebar />
+          <RightSidebar onAddStory={() => setShowStoryModal(true)} />
         </div>
       </div>
+
+      {/* STORY UPLOAD MODAL */}
+      {showStoryModal && (
+        <StoryUploadModal onClose={() => setShowStoryModal(false)} />
+      )}
     </div>
   );
 };

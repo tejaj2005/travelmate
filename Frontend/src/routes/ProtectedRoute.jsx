@@ -3,11 +3,19 @@ import { Navigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
 const ProtectedRoute = ({ children }) => {
-  const { user, loading } = useAuth();
+  const { user, isAuthenticated } = useAuth();
 
-  if (loading) return null;
+  if (user === undefined) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <span className="text-sm opacity-60 animate-pulse">
+          Loading your journey...
+        </span>
+      </div>
+    );
+  }
 
-  if (!user) {
+  if (!isAuthenticated) {
     return <Navigate to="/auth" replace />;
   }
 

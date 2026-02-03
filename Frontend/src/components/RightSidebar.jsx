@@ -1,11 +1,16 @@
 import React, { useState } from "react";
 import { Plus, Check } from "lucide-react";
+import StoryUploadModal from "./StoryUploadModal";
 
 const stories = [
   { id: 1, name: "Alex", avatar: "https://i.pravatar.cc/100?img=11" },
   { id: 2, name: "Mia", avatar: "https://i.pravatar.cc/100?img=12" },
   { id: 3, name: "Leo", avatar: "https://i.pravatar.cc/100?img=13" },
   { id: 4, name: "Sara", avatar: "https://i.pravatar.cc/100?img=14" },
+  { id: 5, name: "Alex", avatar: "https://i.pravatar.cc/100?img=32" },
+  { id: 6, name: "Mia", avatar: "https://i.pravatar.cc/100?img=45" },
+  { id: 7, name: "Leo", avatar: "https://i.pravatar.cc/100?img=18" },
+  { id: 8, name: "Nora", avatar: "https://i.pravatar.cc/100?img=27" },
 ];
 
 const suggestions = [
@@ -69,10 +74,35 @@ const suggestions = [
     location: "Stockholm, Sweden",
     avatar: "https://i.pravatar.cc/100?img=29",
   },
+  {
+    id: 11,
+    name: "Ethan Brown",
+    location: "Melbourne, Australia",
+    avatar: "https://i.pravatar.cc/100?img=33",
+  },
+  {
+    id: 12,
+    name: "Sophia Chen",
+    location: "Taipei, Taiwan",
+    avatar: "https://i.pravatar.cc/100?img=47",
+  },
+  {
+    id: 13,
+    name: "Isabella Rossi",
+    location: "Milan, Italy",
+    avatar: "https://i.pravatar.cc/100?img=56",
+  },
+  {
+    id: 14,
+    name: "Arjun Mehta",
+    location: "Mumbai, India",
+    avatar: "https://i.pravatar.cc/100?img=60",
+  },
 ];
 
+const RightSidebar = ({ onAddStory }) => {
+  const [showStoryModal, setShowStoryModal] = useState(false);
 
-const RightSidebar = () => {
   return (
     <aside className="w-80 space-y-2">
       {/* Stories */}
@@ -86,10 +116,11 @@ const RightSidebar = () => {
       >
         <div className="flex items-center justify-between mb-4">
           <p className="text-xs font-medium text-[#1C769A]">Stories</p>
-          <Plus
-            size={16}
-            className="opacity-70 cursor-pointer hover:opacity-100"
-          />
+          <Plus size={16} className="cursor-pointer" onClick={onAddStory} />
+
+          {showStoryModal && (
+            <StoryUploadModal onClose={() => setShowStoryModal(false)} />
+          )}
         </div>
 
         <div className="flex space-x-4 overflow-x-auto scrollbar-hide">
@@ -99,7 +130,7 @@ const RightSidebar = () => {
         </div>
       </div>
 
-      {/* Recommended Tra */}
+      {/* Recommended Travellers */}
       <div
         className="rounded-xl p-4 backdrop-blur-xl transition-colors duration-300"
         style={{
@@ -112,7 +143,7 @@ const RightSidebar = () => {
           Recommended Travellers
         </p>
 
-        <div className="space-y-4">
+        <div className="space-y-4 max-h-[550px] overflow-y-auto pr-2 scrollbar-hide">
           {suggestions.map((user) => (
             <SuggestionItem key={user.id} user={user} />
           ))}

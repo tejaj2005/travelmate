@@ -85,7 +85,7 @@ const AuthPage = () => {
       </div>
 
       {/* CONTENT */}
-      <div className="relative z-10 mt-20 h-[calc(100vh-5rem)] flex justify-end items-center px-4 lg:px-16">
+      <div className="relative z-10 h-[calc(100vh-5rem)] flex justify-end items-center px-4 lg:px-16">
         <div className="w-full lg:w-1/2 flex justify-center lg:justify-end pr-20">
           <AuthCard activeWord={WORDS[activeIndex]} />
         </div>

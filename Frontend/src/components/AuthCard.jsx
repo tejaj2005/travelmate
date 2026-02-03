@@ -1,31 +1,37 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FcGoogle } from "react-icons/fc";
 import { FaFacebook } from "react-icons/fa";
 import { Typewriter } from "react-simple-typewriter";
-import { useTheme } from "../context/ThemeContext";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 
 const AuthCard = ({ activeWord }) => {
-  const { login } = useAuth();
+  const { login, isAuthenticated } = useAuth();
   const navigate = useNavigate();
-  const { theme } = useTheme();
-  const [isLogin, setIsLogin] = useState(false);
 
-  /* ---------------- HANDLERS ---------------- */
+  const [isLogin, setIsLogin] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate("/feed", { replace: true });
+    }
+  }, [isAuthenticated, navigate]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (submitting) return;
 
-    // 🔐 Fake login (replace with API later)
+    setSubmitting(true);
+
+    //Fake login (API-ready)
     login({
       id: 1,
       name: "TravelMate User",
       email: "user@travelmate.com",
     });
 
-    // 🚀 Redirect to Feed
-    navigate("/feed");
+    navigate("/feed", { replace: true });
   };
 
   const handleGoogleLogin = () => {
@@ -35,8 +41,6 @@ const AuthCard = ({ activeWord }) => {
   const handleFacebookLogin = () => {
     console.log("Initiating Facebook login...");
   };
-
-  /* ---------------- STYLES ---------------- */
 
   const inputStyle =
     "w-full border-b bg-transparent p-2 transition-colors duration-300 font-sans text-sm focus:outline-none focus:border-[#1C769A]";
@@ -56,7 +60,7 @@ const AuthCard = ({ activeWord }) => {
         borderColor: "var(--border)",
       }}
     >
-      {/* ---------------- TITLE ---------------- */}
+      {/* TITLE */}
       <div className="mb-12">
         <h2 className="text-4xl font-logo tracking-widest mb-2">
           New
@@ -76,17 +80,15 @@ const AuthCard = ({ activeWord }) => {
         </h2>
       </div>
 
-      {/* ---------------- FORM ---------------- */}
+      {/* FORM */}
       <div className="flex flex-col h-[calc(100%-6rem)] -mt-6">
         <form className="space-y-6 grow" onSubmit={handleSubmit}>
           <input
             type="text"
             placeholder="Username"
             className={inputStyle}
-            style={{
-              color: "var(--text)",
-              borderColor: "var(--border)",
-            }}
+            style={{ color: "var(--text)", borderColor: "var(--border)" }}
+            required
           />
 
           {!isLogin && (
@@ -94,10 +96,8 @@ const AuthCard = ({ activeWord }) => {
               type="email"
               placeholder="Email"
               className={inputStyle}
-              style={{
-                color: "var(--text)",
-                borderColor: "var(--border)",
-              }}
+              style={{ color: "var(--text)", borderColor: "var(--border)" }}
+              required
             />
           )}
 
@@ -105,10 +105,8 @@ const AuthCard = ({ activeWord }) => {
             type="password"
             placeholder="Password"
             className={inputStyle}
-            style={{
-              color: "var(--text)",
-              borderColor: "var(--border)",
-            }}
+            style={{ color: "var(--text)", borderColor: "var(--border)" }}
+            required
           />
 
           {!isLogin && (
@@ -116,34 +114,34 @@ const AuthCard = ({ activeWord }) => {
               type="password"
               placeholder="Confirm Password"
               className={inputStyle}
-              style={{
-                color: "var(--text)",
-                borderColor: "var(--border)",
-              }}
+              style={{ color: "var(--text)", borderColor: "var(--border)" }}
+              required
             />
           )}
 
           {/* SUBMIT */}
           <button
             type="submit"
+            disabled={submitting}
             className="
               w-full h-12 bg-[#1C769A] text-white
               font-semibold rounded-lg
               hover:bg-opacity-90
               transition-all duration-300
               shadow-lg shadow-[#1C769A]/30
-              mt-5
+              mt-5 disabled:opacity-70
             "
           >
-            {buttonText}
+            {submitting ? "Entering..." : buttonText}
           </button>
         </form>
 
-        {/* ---------------- FOOTER ---------------- */}
+        {/* FOOTER */}
         <div className="shrink-0 text-center pt-4 mt-4">
           <p className="text-sm">
             {isLogin ? "New User? " : "Already exists? "}
             <button
+              type="button"
               onClick={() => setIsLogin(!isLogin)}
               className="text-[#1C769A] font-medium hover:underline ml-1"
             >
@@ -158,37 +156,25 @@ const AuthCard = ({ activeWord }) => {
             }`}
           >
             <div className="relative flex items-center justify-center py-2">
-              <div
-                className="grow border-t"
-                style={{ borderColor: "var(--border)" }}
-              />
+              <div className="grow border-t" style={{ borderColor: "var(--border)" }} />
               <span className="mx-4 text-xs text-gray-400">OR</span>
-              <div
-                className="grow border-t"
-                style={{ borderColor: "var(--border)" }}
-              />
+              <div className="grow border-t" style={{ borderColor: "var(--border)" }} />
             </div>
 
             <div className="flex justify-center space-x-10 pb-2">
               <button
+                type="button"
                 onClick={handleGoogleLogin}
-                className="
-                  flex items-center justify-center
-                  w-11 h-11 rounded-full
-                  border transition hover:border-[#1C769A]
-                "
+                className="flex items-center justify-center w-11 h-11 rounded-full border transition hover:border-[#1C769A]"
                 style={{ borderColor: "var(--border)" }}
               >
                 <FcGoogle size={24} />
               </button>
 
               <button
+                type="button"
                 onClick={handleFacebookLogin}
-                className="
-                  flex items-center justify-center
-                  w-11 h-11 rounded-full
-                  border transition hover:border-[#1C769A]
-                "
+                className="flex items-center justify-center w-11 h-11 rounded-full border transition hover:border-[#1C769A]"
                 style={{ borderColor: "var(--border)" }}
               >
                 <FaFacebook size={24} className="text-blue-500" />
